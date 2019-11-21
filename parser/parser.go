@@ -34,7 +34,16 @@ func New(fname string) *Parser {
 	codeProc := reComments.ReplaceAllString(string(code), "")
 	codeProc = reWhiteSpace.ReplaceAllString(string(codeProc), "")
 
-	p.tokens = reTokens.FindAllString(codeProc, -1)
+	tokens := reTokens.FindAllString(codeProc, -1)
+	// solucao ineficiente TODO: remover o uso de expressoes regulares
+	var s []string
+	for _, tk := range tokens {
+		if tk != "" {
+			s = append(s, tk)
+		}
+	}
+	p.tokens = s
+
 	p.position = 0
 	return p
 }
@@ -44,7 +53,7 @@ func (p *Parser) Reset() {
 }
 
 func (p *Parser) HasMoreCommands() bool {
-	return p.position < len(p.tokens)-1
+	return p.position < len(p.tokens)
 }
 
 func (p *Parser) Advance() {
@@ -66,19 +75,24 @@ func (p *Parser) NextCommand() command.Command {
 	case '@':
 		return command.ACommand{At: split(str, 1, len(str))}
 	default:
-		dest := strings.Split(str, "=")[0]
-		l := strings.Split(str, ";")
-		var jmp, cmp string
-		if len(l) > 1 {
-			jmp = l[1]
-		} else {
-			jmp = ""
-		}
-		l2 := strings.Split(l[0], "=")
-		if len(l2) > 1 {
-			cmp = l2[1]
-		} else {
-			cmp = ""
+		var dest, cmp, jmp string
+		if strings.Index(str, "=") != -1 { // tem destino
+			dest = strings.Split(str, "=")[0]
+
+			rest := strings.Split(str, "=")[1]
+			if strings.Index(rest, ";") != -1 { // tem jump
+				jmp = strings.Split(rest, ";")[1]
+				cmp = strings.Split(rest, ";")[0]
+			} else {
+				cmp = rest
+			}
+		} else { // nao tem destino
+			if strings.Index(str, ";") != -1 { // tem jump
+				jmp = strings.Split(str, ";")[1]
+				cmp = strings.Split(str, ";")[0]
+			} else {
+				cmp = str
+			}
 		}
 		return command.CCommand{Dest: dest, Comp: cmp, Jump: jmp}
 	}
