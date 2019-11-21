@@ -1,20 +1,7 @@
 package main
 
-/*
-
-remove whitespace and comments
-Translating 23 pre-defined symbols:
-
-Initialization:
-	Construct an empty symbol table
-	Add the pre-defined symbols to the symbol table
-
-*/
-
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -26,16 +13,6 @@ import (
 	"github.com/profsergiocosta/hack-assembler/parser"
 	"github.com/profsergiocosta/hack-assembler/symboltable"
 )
-
-func isDirectory(path string) bool {
-	fileInfo, err := os.Stat(path)
-	if err != nil {
-		abs, _ := filepath.Abs(path)
-		fmt.Printf("Could not find file or directory: %s \n", abs)
-		os.Exit(1)
-	}
-	return fileInfo.IsDir()
-}
 
 func filenameWithoutExtension(fn string) string {
 	return strings.TrimSuffix(fn, path.Ext(fn))
@@ -80,7 +57,6 @@ func secondPass(p *parser.Parser, st *symboltable.SymbolTable, pathName string) 
 					write(file, code.GenACommand(symboltable.Address(address)))
 				} else {
 					st.AddEntry(cmd.At, symboltable.Address(varAddress))
-					//fmt.Println(cmd.At)
 					write(file, code.GenACommand(symboltable.Address(varAddress)))
 					varAddress++
 				}
@@ -97,31 +73,14 @@ func main() {
 
 	if len(arg) == 1 {
 		path := arg[0]
+		p := parser.New(path)
 
-		if isDirectory(path) {
-			files, err := ioutil.ReadDir(path)
-			if err != nil {
-				log.Fatal(err)
-			}
+		st := symboltable.NewSymbolTable()
 
-			for _, f := range files {
-
-				if filepath.Ext(f.Name()) == ".vm" {
-
-				}
-
-			}
-
-		} else {
-			p := parser.New(path)
-
-			st := symboltable.NewSymbolTable()
-
-			firstPass(p, st)
-			p.Reset()
-			abs, _ := filepath.Abs(path)
-			secondPass(p, st, filenameWithoutExtension(abs)+".hack")
-		}
+		firstPass(p, st)
+		p.Reset()
+		abs, _ := filepath.Abs(path)
+		secondPass(p, st, filenameWithoutExtension(abs)+".hack")
 
 	}
 
