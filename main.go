@@ -43,7 +43,11 @@ func secondPass(p *parser.Parser, st *symboltable.SymbolTable, pathName string) 
 	code := code.New()
 	varAddress := 16
 	fmt.Printf("Assembling to %s\n", pathName)
+
+	
 	for p.HasMoreCommands() {
+		//println("mais comandos")
+		
 		switch cmd := p.NextCommand().(type) {
 		case command.CCommand:
 			write(file, code.GenCCommand(cmd.Dest, cmd.Comp, cmd.Jump))
@@ -65,6 +69,7 @@ func secondPass(p *parser.Parser, st *symboltable.SymbolTable, pathName string) 
 
 		}
 	}
+	
 	file.Close()
 }
 

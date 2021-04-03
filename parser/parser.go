@@ -22,6 +22,7 @@ func New(fname string) *Parser {
 		panic("Error")
 	}
 
+	
 	reWhiteSpace, err := regexp.Compile(` *`)
 	if err != nil {
 		// tratar o erro aqui
@@ -38,12 +39,12 @@ func New(fname string) *Parser {
 	// solucao ineficiente TODO: remover o uso de expressoes regulares
 	var s []string
 	for _, tk := range tokens {
-		if tk != "" {
-			s = append(s, tk)
+		tkt := strings.TrimSpace(tk)
+		if tk != "" && tk[0] != 13 {
+			s = append(s, tkt)
 		}
 	}
 	p.tokens = s
-
 	p.position = 0
 	return p
 }
@@ -69,6 +70,7 @@ func split(value string, begin int, end int) string {
 func (p *Parser) NextCommand() command.Command {
 	p.Advance()
 	str := p.currToken
+
 	switch p.currToken[0] {
 	case '(':
 		return command.LCommand{Label: split(str, 1, len(str)-1)}

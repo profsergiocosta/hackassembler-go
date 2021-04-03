@@ -56,6 +56,7 @@ func convertBinary(value symboltable.Address) string {
 	s := fmt.Sprintf("%b", value)
 	repeat := 15 - len(s)
 	s = strings.Repeat("0", repeat) + s
+	//println(value,s)
 	return s
 }
 
