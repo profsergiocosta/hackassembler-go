@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/profsergiocosta/hack-assembler/command"
+	"hack-assembler/command"
 )
 
 type Parser struct {
@@ -22,7 +22,6 @@ func New(fname string) *Parser {
 		panic("Error")
 	}
 
-	
 	reWhiteSpace, err := regexp.Compile(` *`)
 	if err != nil {
 		// tratar o erro aqui

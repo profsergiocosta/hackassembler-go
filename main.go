@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/profsergiocosta/hack-assembler/code"
-	"github.com/profsergiocosta/hack-assembler/command"
-	"github.com/profsergiocosta/hack-assembler/parser"
-	"github.com/profsergiocosta/hack-assembler/symboltable"
+	"hack-assembler/code"
+	"hack-assembler/command"
+	"hack-assembler/parser"
+	"hack-assembler/symboltable"
 )
 
 func filenameWithoutExtension(fn string) string {
@@ -44,10 +44,9 @@ func secondPass(p *parser.Parser, st *symboltable.SymbolTable, pathName string) 
 	varAddress := 16
 	fmt.Printf("Assembling to %s\n", pathName)
 
-	
 	for p.HasMoreCommands() {
 		//println("mais comandos")
-		
+
 		switch cmd := p.NextCommand().(type) {
 		case command.CCommand:
 			write(file, code.GenCCommand(cmd.Dest, cmd.Comp, cmd.Jump))
@@ -69,7 +68,7 @@ func secondPass(p *parser.Parser, st *symboltable.SymbolTable, pathName string) 
 
 		}
 	}
-	
+
 	file.Close()
 }
 

@@ -1,1 +1,1 @@
-go run github.com/profsergiocosta/hack-assembler
+go run hack-assembler
