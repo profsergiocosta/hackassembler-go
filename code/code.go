@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"hack-assembler/symboltable"
+	"hackassembler-go/symboltable"
 )
 
 type Code struct {

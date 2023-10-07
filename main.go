@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"hack-assembler/code"
-	"hack-assembler/command"
-	"hack-assembler/parser"
-	"hack-assembler/symboltable"
+	"hackassembler-go/code"
+	"hackassembler-go/command"
+	"hackassembler-go/parser"
+	"hackassembler-go/symboltable"
 )
 
 func filenameWithoutExtension(fn string) string {

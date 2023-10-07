@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"hack-assembler/command"
+	"hackassembler-go/command"
 )
 
 type Parser struct {
